@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable semi */
 /* eslint-disable prettier/prettier */
@@ -10,6 +11,8 @@ import {
     TextInput,
     TouchableOpacity,
 } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -37,9 +40,46 @@ const CMEntry = ({ hint, isPassword, keyboardMode, onChange, icon }) => {
     );
 };
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+
+    React.useEffect(() => {
+        setNavigationOption();
+    }, []);
+
+    setNavigationOption = () => {
+        props.navigation.setOptions({
+            title: 'Home',
+            headerStyle: {
+                backgroundColor: '#999CED',
+            },
+            headerTintColor: '#FFFFFF',
+            headerTitleStyle: { color: '#fff' },
+            headerBackTitle: ' ',
+            headerRight: () => (
+                <TouchableOpacity
+                    activeOpacity={0.1}
+                    onPress={() => alert('www.codemobiles.com')}
+                    style={{ padding: 10 }}>
+                    <Icon
+                        name="address-card"
+                        size={20}
+                        color="#fff"
+                        style={{
+                            height: 24,
+                            width: 24,
+                        }}
+                    />
+                </TouchableOpacity>
+            ),
+        });
+    };
+
+    login = async () => {
+        const regUsername = await AsyncStorage.getItem('kUsername')
+    }
 
     return (
         <ImageBackground
@@ -82,7 +122,7 @@ export default function HomeScreen() {
                 {/* Confirm button */}
                 <TouchableOpacity
                     onPress={() => {
-                        alert(`username : ${username}, password : ${password}`);
+                        props.navigation.navigate('Success');
                     }}
                     style={{
                         backgroundColor: '#0F0',
@@ -99,6 +139,7 @@ export default function HomeScreen() {
 
                 {/* Cancel button */}
                 <TouchableOpacity
+                    onPress={() => props.navigation.navigate('Register')}
                     style={{
                         height: 50,
                         borderRadius: 10,
@@ -108,7 +149,7 @@ export default function HomeScreen() {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                    <Text style={{ fontWeight: 'bold' }}>CANCEL</Text>
+                    <Text style={{ fontWeight: 'bold' }}>REGISTER</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>

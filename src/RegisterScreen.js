@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable semi */
 /* eslint-disable prettier/prettier */
@@ -11,9 +12,51 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-export default function RegisterScreen() {
+import AsyncStorage from '@react-native-community/async-storage';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+export default function RegisterScreen(props) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    React.useEffect(() => {
+        setNavigationOption();
+    }, [])
+
+    const setNavigationOption = () => {
+        props.navigation.setOptions({
+            title: 'Register',
+            headerStyle: {
+                backgroundColor: '#999CED',
+            },
+            headerTintColor: '#FFFFFF',
+            headerTitleStyle: { color: '#fff' },
+            headerBackTitle: ' ',
+            headerRight: () => (
+                <TouchableOpacity
+                    activeOpacity={0.1}
+                    onPress={() => alert('www.codemobiles.com')}
+                    style={{ padding: 10 }}>
+                    <Icon
+                        name="address-card"
+                        size={20}
+                        color="#fff"
+                        style={{
+                            height: 24,
+                            width: 24,
+                        }} />
+                </TouchableOpacity>
+            ),
+        });
+    }
+
+    onClickRegister = async () => {
+        await AsyncStorage.setItem('kUsername', username);
+        await AsyncStorage.setItem('kPassword', password);
+        props.navigation.goBack();
+    };
+
     return (
         <ImageBackground
             style={{ flex: 1 }}
@@ -88,8 +131,9 @@ export default function RegisterScreen() {
                     />
                 </View>
 
+                {/* Confirm button */}
                 <TouchableOpacity
-                    onPress={() => alert(`Username : ${username} & Password : ${password} `)}
+                    onPress={onClickRegister}
                     style={{
                         backgroundColor: '#7cbc2d',
                         height: 50,
@@ -104,6 +148,7 @@ export default function RegisterScreen() {
                 </TouchableOpacity>
                 {/* Cancel button */}
                 <TouchableOpacity
+                    onPress={() => props.navigation.goBack()}
                     style={{
                         height: 50,
                         borderRadius: 10,
@@ -113,7 +158,7 @@ export default function RegisterScreen() {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                    <Text style={{ fontWeight: 'bold' }}>CANCEL</Text>
+                    <Text style={{ fontWeight: 'bold' }}>Back</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
