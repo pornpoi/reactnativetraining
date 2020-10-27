@@ -11,18 +11,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-const CMEntry = ({ hint, isPassword, keyboardMode, onChange }) => {
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+const CMEntry = ({ hint, isPassword, keyboardMode, onChange, icon }) => {
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {/* Icon */}
-            <View
-                style={{
-                    height: 40,
-                    width: 40,
-                    backgroundColor: 'red',
-                    borderRadius: 20,
-                }}
-            />
+            <Icon name={icon} size={35} style={{ width: 35 }} />
 
             <TextInput
                 style={{
@@ -69,21 +64,19 @@ export default function HomeScreen() {
                 }}>
                 {/* Username */}
                 <CMEntry
+                    icon="user"
                     hint="Username"
                     keyboardMode="email-address"
-                    onChange={(text) => {
-                        setUsername(text)
-                    }}
+                    onChange={(text) => setUsername(text)}
                 />
                 <View style={{ height: 8 }} />
 
                 {/* Password */}
                 <CMEntry
+                    icon="lock"
                     hint="Password"
                     isPassword
-                    onChange={(text) => {
-                        setPassword(text)
-                    }}
+                    onChange={(text) => setPassword(text)}
                 />
 
                 {/* Confirm button */}
