@@ -77,9 +77,16 @@ export default function HomeScreen(props) {
         });
     };
 
-    login = async () => {
-        const regUsername = await AsyncStorage.getItem('kUsername')
-    }
+    onClickLogin = async () => {
+        const regUsername = await AsyncStorage.getItem('kUsername');
+        const regPassword = await AsyncStorage.getItem('kPassword');
+
+        if (username == regUsername && password == regPassword) {
+            alert('Success');
+        } else {
+            alert('Failed : ' + `${regUsername}, ${regPassword}`);
+        }
+    };
 
     return (
         <ImageBackground
@@ -121,9 +128,7 @@ export default function HomeScreen(props) {
 
                 {/* Confirm button */}
                 <TouchableOpacity
-                    onPress={() => {
-                        props.navigation.navigate('Success');
-                    }}
+                    onPress={onClickLogin}
                     style={{
                         backgroundColor: '#0F0',
                         height: 50,
