@@ -1,8 +1,5 @@
-/* eslint-disable no-undef */
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable semi */
-/* eslint-disable prettier/prettier */
-import React, { useState } from 'react'
+import AsyncStorage from '@react-native-community/async-storage';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -10,13 +7,14 @@ import {
     Image,
     TextInput,
     TouchableOpacity,
+    Platform,
 } from 'react-native';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import { StackActions } from '@react-navigation/native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CMEntry = ({ hint, isPassword, keyboardMode, onChange, icon }) => {
+CMEntry = ({ hint, isPassword, keyboardMode, onChange, icon }) => {
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {/* Icon */}
@@ -28,6 +26,7 @@ const CMEntry = ({ hint, isPassword, keyboardMode, onChange, icon }) => {
                     flex: 1,
                     paddingLeft: 16,
                     borderWidth: 1,
+                    height: Platform.OS == 'android' ? 40 : 50,
                     borderColor: '#0007',
                     borderRadius: 5,
                 }}
@@ -43,7 +42,6 @@ const CMEntry = ({ hint, isPassword, keyboardMode, onChange, icon }) => {
 export default function HomeScreen(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
 
     React.useEffect(() => {
         setNavigationOption();
@@ -77,17 +75,32 @@ export default function HomeScreen(props) {
         });
     };
 
+    /*
     onClickLogin = async () => {
-        const regUsername = await AsyncStorage.getItem('kUsername');
-        const regPassword = await AsyncStorage.getItem('kPassword');
-    
-        if (username == regUsername && password == regPassword) {
-          alert('Success');
+      const regUsername = await AsyncStorage.getItem('kUsername');
+      const regPassword = await AsyncStorage.getItem('kPassword');
+  
+      if (username == regUsername && password == regPassword) {
+        alert('Success');
+      } else {
+        alert('Failed : ' + `${regUsername}, ${regPassword}`);
+      }
+      props.navigation.navigate('Success');
+    };*/
+
+    onClickLogin = async () => {
+        const _username = await AsyncStorage.getItem('kUsername');
+        const _password = await AsyncStorage.getItem('kPassword');
+
+        if (username == _username && password == _password) {
+            await AsyncStorage.setItem('token', 'xxxx');
+            // props.navigation.navigate('Success');
+            props.navigation.dispatch(StackActions.replace('Success'));
         } else {
-          alert('Failed : ' + `${regUsername}, ${regPassword}`);
+            await AsyncStorage.removeItem('token');
+            alert(`Login failed ${_username}, ${_password}`);
         }
-        props.navigation.navigate('Success');
-      };
+    };
 
     return (
         <ImageBackground
@@ -143,7 +156,7 @@ export default function HomeScreen(props) {
                     <Text style={{ fontWeight: 'bold' }}>LOGIN</Text>
                 </TouchableOpacity>
 
-                {/* Cancel button */}
+                {/* Register button */}
                 <TouchableOpacity
                     onPress={() => props.navigation.navigate('Register')}
                     style={{

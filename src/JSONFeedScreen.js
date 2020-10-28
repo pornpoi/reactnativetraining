@@ -11,7 +11,7 @@ import {
 
 import axios from 'axios';
 
-export default function JSONFeedScreen() {
+export default function JSONFeedScreen(props) {
   const [dataArray, setDataArray] = useState([]);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
@@ -32,7 +32,11 @@ export default function JSONFeedScreen() {
   };
 
   renderRow = ({ item, index }) => (
-    <TouchableOpacity style={styles.listCard}>
+    <TouchableOpacity
+      style={styles.listCard}
+      onPress={() => {
+        props.navigation.navigate('Youtube', { item });
+      }}>
       {/* Avatar and title, subtitle */}
       <View style={styles.listCardView}>
         {/* Avatar */}
@@ -40,7 +44,7 @@ export default function JSONFeedScreen() {
 
         {/* Title and Subtitle */}
         <View style={styles.listTitleSubtitleContainer}>
-          <Text style={styles.listTitle}>{item.avatar_image}</Text>
+          <Text style={styles.listTitle}>{item.title}</Text>
           <Text style={styles.listSubTitle}>{item.subtitle}</Text>
         </View>
       </View>
@@ -60,7 +64,6 @@ export default function JSONFeedScreen() {
       style={{ height: 100, width: '100%' }}
     />
   );
-
 
   const refresh = () => {
     setIsRefreshing(true);

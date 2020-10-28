@@ -26,8 +26,8 @@ const successOption = (props) => {
       <TouchableOpacity
         activeOpacity={0.1}
         onPress={async () => {
-          // await AsyncStorage.removeItem('token');
-          // props.setIsReady(false);
+          await AsyncStorage.removeItem('token');
+          props.setIsReady(false);
         }}
         style={{ padding: 10 }}>
         <Icon
@@ -47,24 +47,31 @@ const successOption = (props) => {
 const RootStack = (props) => {
   return (
     <Stack.Navigator initialRouteName="Home">
-      <>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Login' }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ title: 'Register' }}
-        />
-
-        <Stack.Screen
-          name="Success"
-          component={SuccessTab}
-          options={successOption(props)}
-        />
-      </>
+      {props.showAuthen ? (
+        <>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ title: 'Login' }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{ title: 'Register' }}
+          />
+          <Stack.Screen
+            name="Success"
+            component={SuccessTab}
+            options={successOption(props)}
+          />
+        </>
+      ) : (
+          <Stack.Screen
+            name="Success"
+            component={SuccessTab}
+            options={successOption(props)}
+          />
+        )}
     </Stack.Navigator>
   );
 };
@@ -105,11 +112,23 @@ const tab2 = {
     />
   ),
 };
+
+// start
+const JSONStackScreen = () => {
+  return (
+    <Stack.Navigator initialRouteName="JSON">
+      <Stack.Screen component={JSONFeedScreen} name="JSON" />
+      <Stack.Screen component={YoutubeScreen} name="Youtube" />
+    </Stack.Navigator>
+  );
+};
+//end
+
 const SuccessTab = () => {
   return (
     <Tab.Navigator initialRouteName="JSON">
       <>
-        <Tab.Screen name="JSON" component={JSONFeedScreen} options={tab1} />
+        <Tab.Screen name="JSON" component={JSONStackScreen} options={tab1} />
         <Tab.Screen name="Camera" component={CameraScreen} options={tab2} />
       </>
     </Tab.Navigator>
