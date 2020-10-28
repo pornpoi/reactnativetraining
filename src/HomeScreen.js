@@ -80,13 +80,14 @@ export default function HomeScreen(props) {
     onClickLogin = async () => {
         const regUsername = await AsyncStorage.getItem('kUsername');
         const regPassword = await AsyncStorage.getItem('kPassword');
-
+    
         if (username == regUsername && password == regPassword) {
-            alert('Success');
+          alert('Success');
         } else {
-            alert('Failed : ' + `${regUsername}, ${regPassword}`);
+          alert('Failed : ' + `${regUsername}, ${regPassword}`);
         }
-    };
+        props.navigation.navigate('Success');
+      };
 
     return (
         <ImageBackground
